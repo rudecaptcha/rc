@@ -1,0 +1,1 @@
+import{j as e}from"./index-DovDBCMP.js";const a=({showTick:t,onClick:o,icon:r})=>e.jsx("button",{disabled:t,className:"text-white font-bold py-2 px-2 rounded hover:bg-blue-50",onClick:o,children:e.jsx("span",{className:`material-icons  text-2xl  ${t?"text-white":"text-gray-500 hover:bg-blue-50"}`,children:r})});export{a as default};

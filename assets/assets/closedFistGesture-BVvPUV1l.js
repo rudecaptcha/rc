@@ -1,0 +1,1 @@
+let l=null;if(typeof window<"u"&&window.fp){const{Finger:e,FingerCurl:i,GestureDescription:n}=window.fp;l=new n("closed_fist"),l.addCurl(e.Thumb,i.FullCurl,1);for(let d of[e.Index,e.Middle,e.Ring,e.Pinky])l.addCurl(d,i.FullCurl,1)}export{l as closedFistGesture};
