@@ -1,1 +1,0 @@
-let i=null;if(typeof window<"u"&&window.fp){const{Finger:e,FingerCurl:n,FingerDirection:r,GestureDescription:l}=window.fp;i=new l("middle_finger_down");for(let d of[e.Thumb,e.Index,e.Ring,e.Pinky])i.addCurl(d,n.NoCurl,1),i.addDirection(d,r.VerticalUp,1);i.addCurl(e.Middle,n.FullCurl,1)}export{i as middle_finger_down};
