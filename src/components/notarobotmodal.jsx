@@ -89,6 +89,9 @@ const NotARobotModal = memo(({ setShowNotARobotModal, net }) => {
               </p>
               <p>Verify your humanity by swearing at the camera</p>
               <p>Copy the rude gesture in the top right at the camera</p>
+              <p class="block md:hidden">
+                Loading slowly? rudeCAPTCHA works better on desktop
+              </p>
             </div>
             <button
               className={`w-full py-2 rounded shadow text-white text-xl font-bold ${

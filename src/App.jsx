@@ -168,6 +168,21 @@ export default function Main() {
     [detect]
   );
 
+  ///experimental
+
+  const parallelCompile = async (net) => {
+    if (window.tf && window.tf.getBackend() === "webgpu") {
+      console.log("Using WebGPU backend, starting parallel compilation");
+      window.tf.env().set("WEBGPU_ENGINE_COMPILE_ONLY", true);
+      const dummyInput = window.tf.zeros([1, 224, 224, 3]); // adjust shape as needed
+      const compileRes = await net.estimateHands(dummyInput);
+      window.tf.env().set("WEBGPU_ENGINE_COMPILE_ONLY", false);
+      await window.tf.backend().checkCompileCompletionAsync();
+      window.tf.dispose(compileRes);
+      console.log("Parallel compilation completed");
+    }
+  };
+
   useEffect(() => {
     async function setupWebcamAndModels() {
       try {
@@ -180,9 +195,14 @@ export default function Main() {
         });
         webcamRef.current.srcObject = stream;
 
+        console.log("Loading handpose model...");
         const loadedNet = await handpose.load();
-        setNet(loadedNet);
 
+        // Perform parallel compilation
+        await parallelCompile(loadedNet);
+
+        setNet(loadedNet);
+        setWebcamLoading(false);
         console.log("Setup complete.");
       } catch (error) {
         console.error("Error setting up webcam or loading models:", error);
@@ -192,7 +212,33 @@ export default function Main() {
     if (typeof window !== "undefined" && navigator.mediaDevices) {
       setupWebcamAndModels();
     }
-  }, []);
+  }, []); // No need to add parallelCompile as a dependency
+
+  // useEffect(() => {
+  //   async function setupWebcamAndModels() {
+  //     try {
+  //       const stream = await navigator.mediaDevices.getUserMedia({
+  //         video: true,
+  //         frameRate: { ideal: 15, max: 30 },
+  //         width: { ideal: 640 },
+  //         height: { ideal: 1138 },
+  //         aspectRatio: { ideal: 9 / 16 },
+  //       });
+  //       webcamRef.current.srcObject = stream;
+
+  //       const loadedNet = await handpose.load();
+  //       setNet(loadedNet);
+
+  //       console.log("Setup complete.");
+  //     } catch (error) {
+  //       console.error("Error setting up webcam or loading models:", error);
+  //     }
+  //   }
+
+  //   if (typeof window !== "undefined" && navigator.mediaDevices) {
+  //     setupWebcamAndModels();
+  //   }
+  // }, []);
 
   useEffect(() => {
     const loadModel = async () => {
@@ -342,7 +388,7 @@ export default function Main() {
               Show debug menu
             </div>
           )}
-          {i > 5 && <div>finished {i}</div>}
+          {/* {i > 5 && <div>finished {i}</div>} */}
           <div
             className="flex justify-between items-center p-4 bg-blue-500"
             style={{ minHeight: "4rem" }}
@@ -415,6 +461,15 @@ export default function Main() {
               </div>
             )}
 
+            {showStartButton && (
+              <div
+                className="absolute top-0 left-0 w-full h-full bg-transparent flex items-center justify-center  "
+                style={{
+                  backdropFilter: "blur(5px)",
+                  WebkitBackdropFilter: "blur(5px)",
+                }}
+              ></div>
+            )}
             <video
               ref={webcamRef}
               autoPlay
