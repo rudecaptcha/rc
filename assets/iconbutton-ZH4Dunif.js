@@ -1,0 +1,1 @@
+import{j as e}from"./index-BwRfSD8R.js";const n=({showTick:t,onClick:r,icon:o,started:s=!0})=>e.jsx("button",{disabled:t||!s,className:"text-white font-bold py-2 px-2 rounded hover:bg-blue-50",onClick:r,children:e.jsx("span",{className:`material-icons  text-2xl  ${t?"text-white":"text-gray-500 hover:bg-blue-50"}`,children:o})});export{n as default};
